@@ -1,4 +1,6 @@
  /* Diseño de las cartas */
-#trioCard{
-    width: 2rem;
+.trioCard {
+    width: 10rem;
+    border-radius: 0.50rem;
+    box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.427) /* Sombra paralela */
 }
