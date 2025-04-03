@@ -1,0 +1,32 @@
+/* -- General classes */
+
+#page-body {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.header {
+    height: 10vh;
+}
+
+#main-content {
+    padding-right: 5%;
+    padding-left: 5%;
+    padding-top: 2%;
+    height: 80vh;
+}
+
+#footer {
+    height: 10vh;
+}
+
+.game-cover {
+    width: 150px;
+    transition: 0.3s;
+    border-radius: 20px;
+}
+
+.game-cover:hover {
+    opacity: 70%;
+    transform: scale(1.1);
+}
