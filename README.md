@@ -1,2 +1,2 @@
 # PlayZone
-Página de juegos de navegador
+Pagina de juegos de navegador
