@@ -1,24 +1,25 @@
-/* -- General classes */
+/* -- General styles */
 
 #page-body {
     margin-left: 10%;
     margin-right: 10%;
 }
 
-.header {
-    height: 10vh;
+#header {
+    height: 70px;
 }
 
 #main-content {
     padding-right: 5%;
     padding-left: 5%;
     padding-top: 2%;
-    height: 80vh;
 }
 
 #footer {
-    height: 10vh;
+    height: 70px;
 }
+
+/* Index styles */
 
 .game-cover {
     width: 150px;
