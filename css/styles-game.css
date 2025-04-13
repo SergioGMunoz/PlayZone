@@ -1,0 +1,19 @@
+/* Hoja de estilos concretos para la pagina game.html */
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    height: 100vh;
+    overflow: hidden; 
+}
+#header{
+    height: 10vh !important;
+}
+#game-iframe{
+    height: 80vh;
+    overflow: hidden; 
+}
+#footer{
+    height: 10vh !important;
+}
