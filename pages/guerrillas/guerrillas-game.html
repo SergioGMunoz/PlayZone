@@ -25,15 +25,21 @@
           />
           <div class="warrior-info-shop">
             <div class="info-element">
-              <img class="img-element" src="img/coin.svg" alt="coin" />
+              <div>
+                <img class="img-element" src="img/coin.svg" alt="coin" />
+              </div>
               <p>2</p>
             </div>
             <div class="info-element">
-              <img class="img-element" src="img/power.svg" alt="coin" />
+              <div>
+                <img class="img-element" src="img/power.svg" alt="coin" />
+              </div>
               <p>2</p>
             </div>
             <div class="info-element">
-              <img class="img-element" src="img/heart.svg" alt="coin" />
+              <div>
+                <img class="img-element" src="img/heart.svg" alt="coin" />
+              </div>
               <p>2</p>
             </div>
           </div>
@@ -46,15 +52,21 @@
           />
           <div class="warrior-info-shop">
             <div class="info-element">
-              <img class="img-element" src="img/coin.svg" alt="coin" />
+              <div>
+                <img class="img-element" src="img/coin.svg" alt="coin" />
+              </div>
               <p>2</p>
             </div>
             <div class="info-element">
-              <img class="img-element" src="img/power.svg" alt="coin" />
+              <div>
+                <img class="img-element" src="img/power.svg" alt="coin" />
+              </div>
               <p>2</p>
             </div>
             <div class="info-element">
-              <img class="img-element" src="img/heart.svg" alt="coin" />
+              <div>
+                <img class="img-element" src="img/heart.svg" alt="coin" />
+              </div>
               <p>2</p>
             </div>
           </div>
@@ -67,26 +79,70 @@
           />
           <div class="warrior-info-shop">
             <div class="info-element">
-              <img class="img-element" src="img/coin.svg" alt="coin" />
-              <p>2</p>
+              <div>
+                <img class="img-element" src="img/coin.svg" alt="coin"/>
+              </div>
+              <p>1</p>
             </div>
             <div class="info-element">
-              <img class="img-element" src="img/power.svg" alt="coin" />
-              <p>2</p>
+              <div>
+                <img class="img-element" src="img/power.svg" alt="coin" />
+              </div>
+              <p>12</p>
             </div>
             <div class="info-element">
-              <img class="img-element" src="img/heart.svg" alt="coin" />
+              <div>
+                <img class="img-element" src="img/heart.svg" alt="coin" />
+              </div>
               <p>2</p>
             </div>
           </div>
         </div>
+        <div>
+        <button type="button" id="next-turn" class="green-button btn btn-primary">Pasar turno</button>
+
+        </div>
       </div>
       <div id="game-field">
         <div id="enemy">
-          <img id="img-enemy-castle" src="img/castle-ia.svg" alt="castle-enemy" />
-          <div class="info-element">
-            <img class="img-element" src="img/heart.svg" alt="heart" />
+          <div id="enemy-img-content">
+            <img id="img-enemy-castle" src="img/castle-ia.svg" alt="castle-enemy" />
+          </div>
+          <div id="enemy-heart-content" class="info-element">
+            <div>
+              <img class="img-element" src="img/heart.svg" alt="heart" />
+            </div>
             <p id="enemy-heart">2</p>
+          </div>
+        </div>
+        <div id="field">
+          <div class="cell cell-not-enabled" id="en-cell1"></div>
+          <div class="cell" id="en-cell2"></div>
+          <div class="cell" id="en-cell3"></div>
+
+          <div class="cell" id="p-cell1"></div>
+          <div class="cell" id="p-cell2">
+            <img src="img/Warrior1.svg">
+          </div>
+          <div class="cell" id="p-cell3"></div>
+        </div>
+        <div id="player">
+          <div id="player-img-content">
+            <img id="img-player-castle" src="img/castel-player.svg" alt="castle-player" />
+          </div>
+          <div>
+            <div id="player-heart-content" class="info-element">
+              <div>
+                <img class="img-element" src="img/heart.svg" alt="heart" />
+              </div>
+              <p id="player-heart">2</p>
+            </div>
+            <div id="player-heart-content" class="info-element">
+              <div>
+                <img class="img-element" src="img/coins.svg" alt="heart" />
+              </div>
+              <p id="player-coins">0</p>
+            </div>
           </div>
         </div>
       </div>

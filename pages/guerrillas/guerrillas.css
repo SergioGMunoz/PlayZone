@@ -11,6 +11,9 @@
 Link de la investigación:
 https://elementor.com/blog/es/variables-en-css-la-funcion-var/?utm_source=google&utm_medium=cpc&utm_campaign=21512922672&utm_term=&lang=es&gad_source=1&gbraid=0AAAAADSBr8vGa2uDZOtwTpyfPkqubDVX2&gclid=Cj0KCQjwqv2_BhC0ARIsAFb5Ac9zDinEa3ewt44mCNv9oCZZ19QHubAIef5e6Pc6wuRinYLd_neVuSMaAqOCEALw_wcB */ 
 
+p{
+    margin: 0 !important;
+}
 
 body{
     height: 100vh;
@@ -56,17 +59,16 @@ body{
 /* GAME */
 #game-content{
     display: grid;
-    grid-template-columns: repeat(4, 1fr);  
+    grid-template-columns: 1fr 1fr 1fr 1fr;  
     gap: 1rem;
     margin: 0 2rem;
 }
 
 #shop{
     grid-column: 1;
-    background-color: red;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 2rem;
     align-items: center;
     justify-content: center;
 }
@@ -75,18 +77,24 @@ body{
     display: flex;
     flex-direction: row;
     gap: 1rem;
+    align-items: end;
+}
+
+.warrior-info-shop{
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
 }
 
 .img-warrior-shop{
     display: flex;
     flex-direction: column;
-    gap: 1rem;
     width: 5rem;
 }
 
 .info-element{
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 0.3rem;
 }
 
@@ -103,20 +111,73 @@ body{
     grid-column: 2 / span 3;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    background-color: rgb(0, 255, 21);
 }
 #enemy{
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
+    display: grid;
+   grid-template-columns: 1fr 1fr 1fr;
+   gap: 1rem;
 }
-
+#enemy-img-content{
+    grid-column: 2;
+    display: flex;
+    align-items:end;
+    justify-content: center;
+}
+#enemy-heart-content{
+    grid-column: 3;
+    display: flex;
+    align-items:end;
+    justify-content: left;
+    margin-bottom: 0.4rem;
+}
 #img-enemy-castle{
-    width: 9rem;
-}
+    width: 7rem;
+} 
 
-#enemy-info{
-    display: flex;
-    flex-direction: row;
+#player{
+    display: grid;
+   grid-template-columns: 1fr 1fr 1fr;
+   gap: 1rem;
 }
+#player-img-content{
+    grid-column: 2;
+    display: flex;
+    align-items:end;
+    justify-content: center;
+}
+#player-heart-content{
+    grid-column: 3;
+    display: flex;
+    align-items:end;
+    justify-content: left;
+    margin-bottom: 0.4rem;
+}
+#img-player-castle{
+    transform: rotate(180deg);
+    width: 7rem;
+} 
+
+
+#field {
+    width: 100%;
+    aspect-ratio: 1 / 1; 
+    background: url('img/field.svg');
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    position: relative;
+  }
+  /* Para mostrar donde no puede soltar el muñeco */
+  .cell-not-enabled{
+    background-color: red;
+    opacity: 25%;
+  }
+  .cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cell img {
+    width: 4rem;
+  }
