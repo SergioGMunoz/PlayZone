@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guerrillas</title>
+    <link rel="stylesheet" href="guerrillas.css" />
+    <!-- BOOTSTRAP -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <section id="game-content">
+      <div id="shop">
+        <div id="warrior1-shop" class="warrior-shop">
+          <img
+            class="img-warrior-shop"
+            src="img/Warrior1.svg"
+            alt="Warrior 1"
+          />
+          <div class="warrior-info-shop">
+            <div class="info-element">
+              <div>
+                <img class="img-element" src="img/coin.svg" alt="coin" />
+              </div>
+              <p>2</p>
+            </div>
+            <div class="info-element">
+              <div>
+                <img class="img-element" src="img/power.svg" alt="coin" />
+              </div>
+              <p>2</p>
+            </div>
+            <div class="info-element">
+              <div>
+                <img class="img-element" src="img/heart.svg" alt="coin" />
+              </div>
+              <p>2</p>
+            </div>
+          </div>
+        </div>
+        <div id="warrior2-shop" class="warrior-shop">
+          <img
+            class="img-warrior-shop"
+            src="img/Warrior2.svg"
+            alt="Warrior 2"
+          />
+          <div class="warrior-info-shop">
+            <div class="info-element">
+              <div>
+                <img class="img-element" src="img/coin.svg" alt="coin" />
+              </div>
+              <p>2</p>
+            </div>
+            <div class="info-element">
+              <div>
+                <img class="img-element" src="img/power.svg" alt="coin" />
+              </div>
+              <p>2</p>
+            </div>
+            <div class="info-element">
+              <div>
+                <img class="img-element" src="img/heart.svg" alt="coin" />
+              </div>
+              <p>2</p>
+            </div>
+          </div>
+        </div>
+        <div id="warrior3-shop" class="warrior-shop">
+          <img
+            class="img-warrior-shop"
+            src="img/Warrior3.svg"
+            alt="Warrior 3"
+          />
+          <div class="warrior-info-shop">
+            <div class="info-element">
+              <div>
+                <img class="img-element" src="img/coin.svg" alt="coin" />
+              </div>
+              <p>1</p>
+            </div>
+            <div class="info-element">
+              <div>
+                <img class="img-element" src="img/power.svg" alt="coin" />
+              </div>
+              <p>12</p>
+            </div>
+            <div class="info-element">
+              <div>
+                <img class="img-element" src="img/heart.svg" alt="coin" />
+              </div>
+              <p>2</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button
+            type="button"
+            id="next-turn"
+            class="green-button btn btn-primary"
+          >
+            Pasar turno
+          </button>
+        </div>
+      </div>
+      <div id="game-field">
+        <div id="enemy">
+          <div id="enemy-img-content">
+            <img
+              id="img-enemy-castle"
+              src="img/castle-ia.svg"
+              alt="castle-enemy"
+            />
+          </div>
+          <div id="enemy-heart-content" class="info-element">
+            <div>
+              <img class="img-element" src="img/heart.svg" alt="heart" />
+            </div>
+            <p id="enemy-heart">2</p>
+          </div>
+        </div>
+        <div id="field">
+          <div class="cell" id="en-cell1"></div>
+          <div class="cell" id="en-cell2"></div>
+          <div class="cell" id="en-cell3"></div>
+
+          <div class="cell" id="p-cell1"></div>
+          <div class="cell" id="p-cell2"></div>
+          <div class="cell" id="p-cell3"></div>
+        </div>
+        <div id="player">
+          <div id="player-img-content">
+            <img
+              id="img-player-castle"
+              src="img/castel-player.svg"
+              alt="castle-player"
+            />
+          </div>
+          <div>
+            <div id="player-heart-content" class="info-element">
+              <div>
+                <img class="img-element" src="img/heart.svg" alt="heart" />
+              </div>
+              <p id="player-heart">2</p>
+            </div>
+            <div id="player-heart-content" class="info-element">
+              <div>
+                <img class="img-element" src="img/coins.svg" alt="heart" />
+              </div>
+              <p id="player-coins">0</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="js/guerillas.js"></script>
+    <!-- BOOTSTRAP -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
