@@ -1,0 +1,34 @@
+/* -- General styles */
+
+#page-body {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+#header {
+    height: 70px;
+}
+
+#main-content {
+    height: 80vh;
+    padding-right: 5%;
+    padding-left: 5%;
+    padding-top: 2%;
+}
+
+#footer {
+    height: 70px;
+}
+
+/* Index styles */
+
+.game-cover {
+    width: 150px;
+    transition: 0.3s;
+    border-radius: 20px;
+}
+
+.game-cover:hover {
+    opacity: 70%;
+    transform: scale(1.1);
+}
