@@ -1,32 +1,23 @@
-//Estuctura de datos para el juego trio
+// Configuración del temporizador (Uso de funciones de timer.js)
+setTimeElement(document.getElementById("tiempo"));
+setTime(80); 
+startTimer();
 
-
-//Lista de objetos repetidas 3 veces (cartas con id y ruta img)
+// Estructura cartas
 const chosenCards = [];
-lives = 6;
-
 const cards = [
-  { id: 0 },
-  { id: 0 },
-  { id: 0 },
-  { id: 1 },
-  { id: 1 },
-  { id: 1 },
-  { id: 2 },
-  { id: 2 },
-  { id: 2 },
-  { id: 3 },
-  { id: 3 },
-  { id: 3 },
-  { id: 4 },
-  { id: 4 },
-  { id: 4 },
-  { id: 5 },
-  { id: 5 },
-  { id: 5 }
+    { id: 0 }, { id: 0 }, { id: 0 },
+    { id: 1 }, { id: 1 }, { id: 1 },
+    { id: 2 }, { id: 2 }, { id: 2 },
+    { id: 3 }, { id: 3 }, { id: 3 },
+    { id: 4 }, { id: 4 }, { id: 4 },
+    { id: 5 }, { id: 5 }, { id: 5 }
 ];
-  
-document.getElementById("livesNum").textContent = lives;
+const subtractTime = -3;
+const addTime = 15;
+
+let maxCardsChosen = false;
+
 shuffleCards();
 
 // Bucle que pone una imagen por defecto a las cartas (simulando la parte trasera) y guarda el id en una clase.
@@ -57,47 +48,106 @@ function shuffleCards() {
 // Al elegir una carta
 function chooseCard(card) {
 
-  // Si es una carta que ya esta dada la vueltao se encontro, la ignoro
-  if (card.classList.contains("found") || card.classList.contains("turned")) return;
-  card.classList.add("turned");
+  // Si es una carta que ya esta dada la vuelta o se encontró, la ignoro
+  if (card.classList.contains("chosen") || maxCardsChosen) return;
 
-  if (card.classList.contains("0")) card.src = "img/card0.png";
-  if (card.classList.contains("1")) card.src = "img/card1.png";
-  if (card.classList.contains("2")) card.src = "img/card2.png";
-  if (card.classList.contains("3")) card.src = "img/card3.png";
-  if (card.classList.contains("4")) card.src = "img/card4.png";
-  if (card.classList.contains("5")) card.src = "img/card5.png";
-
-  // Si ya se tenian 3 cartas elegidas, gira la anteriores
-  if (chosenCards.length == 3) {
-    for (let card of chosenCards) {
-      card.src = "img/Card-Back.png";
-      card.classList.remove("turned");
-    }
-    chosenCards.length = 0;
-  }
+  card.classList.add("chosen");
+  const cardId = card.classList[1];
+  card.src = `img/card${cardId}.png`;
   chosenCards.push(card);
 
-  // Si es ahora cuando se tienen 3 cartas elegidas, comprueba si son iguales
+  // Al haber chosen 3 cartas
   if (chosenCards.length == 3) {
     let cartasIguales = true;
-
     for (let card of chosenCards) {
+
       // Al encontrar cartas diferentes
       if (chosenCards[0].classList.value != card.classList.value) {
         cartasIguales = false;
-        lives--;
-        document.getElementById("livesNum").textContent = lives;
+        maxCardsChosen = true;
+
+        // (Esta operacion asegura que el resultado minimo sea 0)
+        time = Math.max(0, time + subtractTime);
+        updateTimer();
+        modifyTime(subtractTime);
+        setTimeout(girarCartas, 1000);
         break;
       }
     }
 
     // Si son todas iguales, las marca como encontradas
     if (cartasIguales) {
+      const foundCards = document.querySelectorAll(".found");
+
       for (let card of chosenCards) {
         card.classList.add("found");
       }
+
+      if (foundCards === cards.length) {
+        victory();
+      }
+
+      time += addTime;
+      updateTimer();
+      modifyTime(addTime); // Suma de 15 segundos
       chosenCards.length = 0;
     }
   }
+}
+
+
+// Gira las cartas elegidas al no ser iguales
+function girarCartas() {
+  for (let card of chosenCards) {
+    card.src = "img/Card-Back.png";
+    card.classList.remove("chosen");
+  }
+  
+  chosenCards.length = 0;  
+  maxCardsChosen = false;
+}
+
+
+// Modificar el tiempo (html) al fallar o acertar
+function modifyTime(time) {
+  const penalizationElement = document.getElementById("penalization");
+
+  // Cambiar el texto según sea penalización o suma
+  if (time < 0) {
+    penalizationElement.textContent = `${time}s`;
+    penalizationElement.style.color = "red"; 
+
+  } else {
+    penalizationElement.textContent = `+${time}s`;
+    penalizationElement.style.color = "green"; 
+  }
+
+  // Mostrar el mensaje de modificación del tiempo
+  penalizationElement.style.opacity = "1";
+
+  // Esconde el mensaje después de 1 segundo
+  function hideMessage() {
+    penalizationElement.style.opacity = "0";
+  }
+
+  setTimeout(hideMessage, 1000);
+}
+
+
+end = function () {
+  gameOver();
+};
+
+
+// Al acabarse el tiempo (¡ESTO SERA REMPLAZADO POR CAMBIAR EL IFRAME A LA VENTANA DE GAME OVER!)
+function gameOver() {
+  alert("¡Se acabó el tiempo!");
+  // Bloquear las cartas al finalizar
+  document.querySelectorAll(".trioCard").forEach(card => card.style.pointerEvents = "none");
+}
+
+
+// Al elegir todas las cartas (¡ESTO SERA REMPLAZADO POR CAMBIAR EL IFRAME A LA VENTANA DE VICTORIA!)
+function victory() {
+  alert("¡Has ganado!");
 }
