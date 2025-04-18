@@ -77,13 +77,12 @@ function chooseCard(card) {
 
     // Si son todas iguales, las marca como encontradas
     if (cartasIguales) {
-      const foundCards = document.querySelectorAll(".found");
 
       for (let card of chosenCards) {
         card.classList.add("found");
       }
 
-      if (foundCards === cards.length) {
+      if (document.querySelectorAll(".found").length == cards.length) {
         victory();
       }
 
@@ -141,13 +140,23 @@ end = function () {
 
 // Al acabarse el tiempo (¡ESTO SERA REMPLAZADO POR CAMBIAR EL IFRAME A LA VENTANA DE GAME OVER!)
 function gameOver() {
-  alert("¡Se acabó el tiempo!");
-  // Bloquear las cartas al finalizar
-  document.querySelectorAll(".trioCard").forEach(card => card.style.pointerEvents = "none");
+  const iframe = parent.document.getElementById("game-iframe");
+  if (iframe) {
+    iframe.src = "pages/trio/trio-lose.html";
+
+  } else {
+    console.error("No se encontró el iframe para cambiar a pantalla de derrota.");
+  }
 }
 
 
 // Al elegir todas las cartas (¡ESTO SERA REMPLAZADO POR CAMBIAR EL IFRAME A LA VENTANA DE VICTORIA!)
 function victory() {
-  alert("¡Has ganado!");
+  const iframe = parent.document.getElementById("game-iframe");
+  if (iframe) {
+    iframe.src = "pages/trio/trio-win.html";
+    
+  } else {
+    console.error("No se encontró el iframe para cambiar a pantalla de victoria.");
+  }
 }
