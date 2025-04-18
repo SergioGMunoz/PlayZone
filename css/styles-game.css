@@ -7,13 +7,9 @@ body{
     height: 100vh;
     overflow: hidden; 
 }
-#header{
-    height: 10vh !important;
-}
+
 #game-iframe{
     height: 80vh;
     overflow: hidden; 
-}
-#footer{
-    height: 10vh !important;
+    padding: 50px;
 }
