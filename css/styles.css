@@ -20,6 +20,16 @@
     height: 10vh;
 }
 
+h1 a {
+    text-decoration: none;  /* Elimina el subrayado de los enlaces no visitados */
+    color: inherit;         /* Mantiene el color del texto del padre */
+    transition: 0.3s;
+}
+
+h1 a:hover {
+    color: yellow;
+}
+
 /* Index styles */
 
 .game-cover {
