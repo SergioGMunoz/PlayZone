@@ -39,40 +39,32 @@ let isPlayerTurn = true;
 // Actualizar los guerreros de la tienda
 function updateShopWarriors() {
   console.log("Actualizando tienda de guerreros");
-  let imgElement;
 
-  // GUERRERO 1
-  imgElement = document.querySelector("#warrior1-shop .img-warrior-shop");
-  imgElement.src = templateWarriors[1].img;
+  for (let i = 1; i <= 3; i++) {
+    const warrior = templateWarriors[i];
+    const imgElement = document.querySelector(`#warrior${i}-shop .img-warrior-shop`);
+    imgElement.src = warrior.img;
 
-  document.getElementById("warrior1-shop-cost").textContent =
-    templateWarriors[1].cost;
-  document.getElementById("warrior1-shop-power").textContent =
-    templateWarriors[1].power;
-  document.getElementById("warrior1-shop-live").textContent =
-    templateWarriors[1].live;
+    document.getElementById(`warrior${i}-shop-cost`).textContent = warrior.cost;
+    document.getElementById(`warrior${i}-shop-power`).textContent = warrior.power;
+    document.getElementById(`warrior${i}-shop-live`).textContent = warrior.live;
+  }
+}
 
-  // GUERRERO 2
-  imgElement = document.querySelector("#warrior2-shop .img-warrior-shop");
-  imgElement.src = templateWarriors[2].img;
-
-  document.getElementById("warrior2-shop-cost").textContent =
-    templateWarriors[2].cost;
-  document.getElementById("warrior2-shop-power").textContent =
-    templateWarriors[2].power;
-  document.getElementById("warrior2-shop-live").textContent =
-    templateWarriors[2].live;
-
-  // GUERRERO 3
-  imgElement = document.querySelector("#warrior3-shop .img-warrior-shop");
-  imgElement.src = templateWarriors[3].img;
-
-  document.getElementById("warrior3-shop-cost").textContent =
-    templateWarriors[3].cost;
-  document.getElementById("warrior3-shop-power").textContent =
-    templateWarriors[3].power;
-  document.getElementById("warrior3-shop-live").textContent =
-    templateWarriors[3].live;
+// Comprobar que guerrerros estan disponibles 
+function updateShopAvailability() {
+  var shopWarriors = document.getElementsByClassName("warrior-shop");
+  for (var i = 0; i < shopWarriors.length; i++) {
+    var div = shopWarriors[i];
+    var cost = parseInt(div.querySelector(".info-element p").textContent, 10);
+    if (cost > money) {
+      div.classList.add("disabled");
+      div.setAttribute("draggable", "false");
+    } else {
+      div.classList.remove("disabled");
+      div.setAttribute("draggable", "true");
+    }
+  }
 }
 
 // Actualizar los valores de vida y dinero de castillos
@@ -80,12 +72,14 @@ function updateInfo() {
   playerLiveElement.textContent = playerLive;
   playerMoneyElement.textContent = money;
   enemyLiveElement.textContent = enemyLive;
+  updateShopAvailability();
 }
 
 //Todas las funciones de actualizar para cuando cargue la página
 function initializeGame() {
   updateShopWarriors();
   updateInfo();
+  enableDragAndDrop();
 }
 
 // Llamamos al cargar la página para que actualize todo
@@ -175,5 +169,117 @@ function nextTurn() {
   }, 1000);
 }
 
+
+// Habilitar drag and drop a los elegibles
+function enableDragAndDrop() {
+  var shopWarriors = document.querySelectorAll(".warrior-shop");
+  for (var i = 0; i < shopWarriors.length; i++) {
+    shopWarriors[i].setAttribute("draggable", "true");
+    addDragStartEvent(shopWarriors[i], i + 1);
+  }
+
+  var playerCells = [
+    document.getElementById("p-cell1"),
+    document.getElementById("p-cell2"),
+    document.getElementById("p-cell3")
+  ];
+
+  for (var j = 0; j < playerCells.length; j++) {
+    addCellEvents(playerCells[j], j);
+  }
+}
+
+// Esta función se ejecuta al comenzar a arrastrar un guerrero. 
+// Guarda el ID del guerrero en el objeto dataTransfer, 
+// para poder recuperarlo luego en la celda donde se suelte (drop).
+function onDragStart(event, warriorId) {
+  event.dataTransfer.setData("warriorId", warriorId);
+}
+
+
+function addCellEvents(cell, index) {
+  cell.addEventListener("dragover", onDragOver);
+  cell.addEventListener("dragleave", function() {
+    onDragLeave(cell);
+  });
+  cell.addEventListener("drop", function(event) {
+    onDrop(event, cell, index);
+  });
+}
+
+function onDragOver(event) {
+  event.preventDefault();
+  event.currentTarget.classList.add("drag-over");
+}
+
+function onDragLeave(cell) {
+  cell.classList.remove("drag-over");
+}
+
+function onDrop(event, cell, index) {
+  event.preventDefault();
+  cell.classList.remove("drag-over");
+
+  var warriorId = event.dataTransfer.getData("warriorId");
+  var warrior = templateWarriors[warriorId];
+
+  if (!warrior || playerWarriors[index] || money < warrior.cost) return;
+
+  var img = document.createElement("img");
+  img.src = warrior.img;
+  img.classList.add("img-warrior-shop");
+  cell.innerHTML = "";
+  cell.appendChild(img);
+
+  playerWarriors[index] = {
+    img: warrior.img,
+    cost: warrior.cost,
+    live: warrior.live,
+    power: warrior.power
+  };
+
+  money -= warrior.cost;
+  updateInfo();
+}
+
+// Devuelve las celdas del jugador
+function getPlayerCells() {
+  return [
+    document.getElementById("p-cell1"),
+    document.getElementById("p-cell2"),
+    document.getElementById("p-cell3")
+  ];
+}
+
+// Pinta de amarillo las casillas disponibles
+function highlightAvailableCells() {
+  const playerCells = getPlayerCells();
+  for (let i = 0; i < playerCells.length; i++) {
+    if (!playerWarriors[i]) {
+      playerCells[i].classList.add("cell-available");
+    }
+  }
+}
+
+// Quitar los indicadorse de celda disponible
+function clearAvailableCells() {
+  const playerCells = getPlayerCells();
+  for (const cell of playerCells) {
+    cell.classList.remove("cell-available");
+  }
+}
+
+function addDragStartEvent(element, warriorId) {
+  // Pinta amarillas las casillas libres al empezar el drag
+  element.addEventListener("dragstart", function(event) {
+    onDragStart(event, warriorId);
+    highlightAvailableCells();   
+  });
+
+  // Quita el amarillo al terminar el drag
+  element.addEventListener("dragend", function() {
+    clearAvailableCells();       
+  });
+}
 
 nextTurnButton.addEventListener("click", nextTurn);

@@ -172,6 +172,13 @@ body {
   background-color: red;
   opacity: 25%;
 }
+
+/* Para mostrar donde puede soltar el muñeco */
+.cell-available {
+  background-color: yellow;
+  opacity: 0.5;
+}
+
 .cell {
   display: flex;
   align-items: center;
