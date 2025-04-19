@@ -99,22 +99,22 @@ function showRandomQuestion() {
 // Función para verificar la respuesta
 function checkAnswer(selectedIndex, correctIndex) {
     const buttons = document.querySelectorAll('.option');
+    const isCorrect = selectedIndex === correctIndex; // Booleano para comprobar si la respuesta es correcta
+
     for (let i = 0; i < buttons.length; i++) {
         if (i === correctIndex) {
-            buttons[i].classList.add('correct'); // Marcar la respuesta correcta
+            // Agregar un tic verde a la respuesta correcta usando innerHTML
+            buttons[i].innerHTML += " <span style='margin-left: 10px;'>✔️</span>";
         }
-        if (i === selectedIndex && i !== correctIndex) {
-            buttons[i].classList.add('incorrect'); // Marcar la respuesta incorrecta
+        if (!isCorrect && i === selectedIndex) {
+            // Agregar una cruz roja a la respuesta incorrecta usando innerHTML
+            buttons[i].innerHTML += " <span style='margin-left: 10px;'>❌</span>";
         }
-        buttons[i].disabled = true; // Deshabilitar botones después de responder
+        buttons[i].disabled = true; // Deshabilitar todos los botones después de responder
     }
 
     // Actualizar el puntaje
-    if (selectedIndex === correctIndex) {
-        score++;
-    } else {
-        score--;
-    }
+    score += isCorrect ? 1 : -1;
 
     // Mostrar el puntaje actualizado
     pointsEndElement.textContent = score;
