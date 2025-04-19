@@ -166,6 +166,7 @@ body {
   grid-template-rows: 1fr 1fr;
   position: relative;
 }
+
 /* Para mostrar donde no puede soltar el muñeco */
 .cell-not-enabled {
   background-color: red;
