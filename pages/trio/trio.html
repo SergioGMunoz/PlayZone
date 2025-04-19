@@ -12,15 +12,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <div id="juego" class="d-flex flex-column justify-content-center align-items-center text-center min-vh-100 px-5">
-        <div id="lives">
-            <i class="fa-solid fa-heart"></i> <span id="livesNum">  </span>
+    <div id="juego" class="d-flex flex-column justify-content-center align-items-center text-center min-vh-100">
+        <div id="time-count" class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-stopwatch"></i> <span id="tiempo"> </span>
         </div>
+        <div id="penalization">0</div>
+        
         <div id="cartas" class=" flex justify-content-center align-items-center text-center">
 
         </div>
     </div>
 
+    <script src="../../js/timer.js"></script>
     <script src="trio.js"></script>
     <!-- BOOTSTRAP -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
