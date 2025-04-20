@@ -18,13 +18,21 @@
        <h2 id="win">¡Bravoo! :)</h2>
        <p>Has acertado <span id="ponits-end">0</span>/10 preguntas</p>
         <div id="start-button" class="text-center d-flex flex-row gap-3">
-            <button id="home" type="button" class="btn btn-secondary">Home</button>
-            <button id="play-again" type="button" class="btn btn-secondary">Volver a jugar</button>
+            <a id="home" href="quiz-start.html" class="btn btn-secondary">Home</a>
+            <a id="play-again" href="quiz-game.html" class="btn btn-secondary">Volver a jugar</a>
         </div>
     </section>
 
     
     <script src="quiz.js"></script>
+    <script>
+        // Recuperar el puntaje y el número total de preguntas desde localStorage
+        const score = localStorage.getItem('quizScore') || 0; // Puntuación obtenida
+        const totalQuestions = localStorage.getItem('questionsAnswered') || 0; // Total de preguntas
+
+        // Actualizar el contenido del elemento con ID 'ponits-end'
+        document.getElementById('ponits-end').textContent = `${score}/${totalQuestions}`;
+    </script>
 
     <!-- BOOTSTRAP -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

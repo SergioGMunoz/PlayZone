@@ -8,12 +8,12 @@ setTime(10);
 startTimer();
 
 function endTime() {
-    // Guardar el puntaje en localStorage
-    localStorage.setItem('quizScore', score);
+    // Guardar el puntaje y el número de preguntas respondidas en localStorage
+    localStorage.setItem('quizScore', score); // Asegúrate de que 'score' sea la variable correcta
+    localStorage.setItem('questionsAnswered', totalQuestions); // Cambia 'totalQuestions' al número total de preguntas respondidas
 
-    // Redirigir a la página final
+    // Redirigir a la pantalla final
     window.location.href = 'quiz-end.html';
-    console.log("Se acabó el tiempo");
 }
 end = endTime; // Asociar la referencia
 
@@ -38,87 +38,84 @@ const questions = [
         question: "¿Quién pintó la Mona Lisa?",
         options: ["Van Gogh", "Picasso", "Leonardo da Vinci", "Miguel Ángel"],
         correct: 2
-    },
-    {
-        question: "¿Cuál es el planeta más grande del sistema solar?",
-        options: ["Tierra", "Marte", "Júpiter", "Saturno"],
-        correct: 2
-    },
-    {
-        question: "¿En qué año llegó el hombre a la Luna?",
-        options: ["1965", "1969", "1972", "1980"],
-        correct: 1
-    },
-    {
-        question: "¿Cuál es el océano más grande del mundo?",
-        options: ["Atlántico", "Pacífico", "Índico", "Ártico"],
-        correct: 1
-    },
-    {
-        question: "¿Qué instrumento mide la presión atmosférica?",
-        options: ["Barómetro", "Termómetro", "Higrómetro", "Anemómetro"],
-        correct: 0
-    },
-    {
-        question: "¿Quién escribió 'Don Quijote de la Mancha'?",
-        options: ["Miguel de Cervantes", "Gabriel García Márquez", "Pablo Neruda", "Federico García Lorca"],
-        correct: 0
-    },
-    {
-        question: "¿Cuál es el metal más ligero?",
-        options: ["Oro", "Plata", "Litio", "Aluminio"],
-        correct: 2
     }
 ];
 
 // Elementos del DOM
 const questionElement = document.getElementById('question');
 const optionsElement = document.getElementById('options');
-const pointsEndElement = document.getElementById('ponits-end'); // Elemento para mostrar los puntos
+
+// Seleccionar el botón de la flecha
+const nextButton = document.querySelector('#end-button button');
 
 // Función para mostrar una pregunta aleatoria
 function showRandomQuestion() {
+    // Verificar si hay preguntas disponibles
+    if (questions.length === 0) {
+        console.log("No hay más preguntas disponibles.");
+        return;
+    }
+
+    // Seleccionar una pregunta aleatoria
     const randomIndex = Math.floor(Math.random() * questions.length);
     const currentQuestion = questions[randomIndex];
 
+    // Actualizar el texto de la pregunta
+    const questionElement = document.getElementById('question');
     questionElement.textContent = currentQuestion.question;
-    optionsElement.innerHTML = ""; // Limpiar opciones anteriores
 
-    // Usar un bucle for para generar las opciones
+    // Limpiar las respuestas anteriores
+    const answersElement = document.getElementById('awnsers');
+    answersElement.innerHTML = "";
+
+    // Colores de los botones (rotativos)
+    const buttonColors = ['btn-info', 'btn-danger', 'btn-warning', 'btn-success'];
+
+    // Generar las opciones de respuesta
     for (let i = 0; i < currentQuestion.options.length; i++) {
         const button = document.createElement('button');
         button.textContent = currentQuestion.options[i];
-        button.classList.add('option');
+        button.classList.add('btn', buttonColors[i % buttonColors.length], 'w-100'); // Asignar colores rotativos
         button.addEventListener('click', function () {
             checkAnswer(i, currentQuestion.correct);
         });
-        optionsElement.appendChild(button);
+        answersElement.appendChild(button);
     }
+
+    // Eliminar la pregunta usada del array
+    questions.splice(randomIndex, 1);
 }
 
 // Función para verificar la respuesta
 function checkAnswer(selectedIndex, correctIndex) {
-    const buttons = document.querySelectorAll('.option');
-    const isCorrect = selectedIndex === correctIndex; // Booleano para comprobar si la respuesta es correcta
+    const buttons = document.querySelectorAll('.btn'); // Seleccionar los botones de las respuestas
+    const isCorrect = selectedIndex === correctIndex; // Comprobar si la respuesta es correcta
 
     for (let i = 0; i < buttons.length; i++) {
         if (i === correctIndex) {
-            // Agregar un tic verde a la respuesta correcta usando innerHTML
-            buttons[i].innerHTML += " <span style='margin-left: 10px;'>✔️</span>";
+            buttons[i].textContent += " ✔️"; // Agregar un tic verde a la respuesta correcta
         }
         if (!isCorrect && i === selectedIndex) {
-            // Agregar una cruz roja a la respuesta incorrecta usando innerHTML
-            buttons[i].innerHTML += " <span style='margin-left: 10px;'>❌</span>";
+            buttons[i].textContent += " ❌"; // Agregar una cruz roja a la respuesta incorrecta
         }
         buttons[i].disabled = true; // Deshabilitar todos los botones después de responder
     }
 
-    // Actualizar el puntaje
-    score += isCorrect ? 1 : -1;
+    // Actualizar el puntaje solo si la respuesta es correcta
+    if (isCorrect) {
+        score++;
+        document.getElementById('points').textContent = score; // Actualizar el puntaje en el DOM
+    }
 
-    // Mostrar el puntaje actualizado
-    pointsEndElement.textContent = score;
+    // Habilitar el botón de la flecha para pasar a la siguiente pregunta
+    nextButton.disabled = false;
 }
+
+// Agregar evento al botón de la flecha
+nextButton.addEventListener('click', function () {
+    nextButton.disabled = true; // Deshabilitar el botón de la flecha hasta que se conteste la siguiente pregunta
+    showRandomQuestion(); // Mostrar la siguiente pregunta
+});
 
 // Inicializar el quiz
 showRandomQuestion();
