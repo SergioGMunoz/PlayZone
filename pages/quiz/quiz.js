@@ -1,5 +1,4 @@
 // JavaScript funcionalidad de el juego quiz!
-
 let score = 0; // Contador de puntos
 
 // Estas funciones están descritas en la hoja timer.js
@@ -8,9 +7,6 @@ setTime(10);
 startTimer();
 
 function endTime() {
-    // Guardar el puntaje y el número total de preguntas en localStorage
-    localStorage.setItem('quizScore', score); // Puntuación obtenida
-    localStorage.setItem('questionsAnswered', 5); // Cambia este valor si el número de preguntas es dinámico
 
     // Redirigir a la pantalla final
     window.location.href = 'quiz-end.html';
