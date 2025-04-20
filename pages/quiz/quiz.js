@@ -1,17 +1,15 @@
 // JavaScript funcionalidad de el juego quiz!
 let score = 0; // Contador de puntos
+let currentQuestionIndex = 0; // Índice de la pregunta actual
+let timeLeft = 10; // Tiempo por pregunta
+let timerInterval; // Intervalo del temporizador
 
-// Estas funciones están descritas en la hoja timer.js
-setTimeElement(document.getElementById('time'));
-setTime(10);
-startTimer();
-
-function endTime() {
-
-    // Redirigir a la pantalla final
-    window.location.href = 'quiz-end.html';
-}
-end = endTime; // Asociar la referencia
+// Elementos del DOM
+const timerElement = document.getElementById('time');
+const pointsElement = document.getElementById('points');
+const questionElement = document.getElementById('question');
+const answersElement = document.getElementById('awnsers');
+const nextButton = document.querySelector('#end-button button');
 
 // Preguntas y respuestas
 const questions = [
@@ -37,49 +35,68 @@ const questions = [
     }
 ];
 
-// Elementos del DOM
-const questionElement = document.getElementById('question');
-const optionsElement = document.getElementById('options');
+// Función para iniciar el temporizador
+function startTimer() {
+    timeLeft = 10; // Reiniciar el tiempo
+    timerElement.textContent = timeLeft;
 
-// Seleccionar el botón de la flecha
-const nextButton = document.querySelector('#end-button button');
+    clearInterval(timerInterval); // Limpiar cualquier temporizador previo
+    timerInterval = setInterval(function () {
+        timeLeft--;
+        timerElement.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            markCorrectAnswer(); // Marcar la respuesta correcta
+            nextButton.disabled = false; // Habilitar el botón de siguiente
+        }
+    }, 1000);
+}
+
+// Función para marcar la respuesta correcta automáticamente
+function markCorrectAnswer() {
+    const buttons = document.querySelectorAll('.btn');
+    const currentQuestion = questions[currentQuestionIndex];
+
+    buttons.forEach((button, index) => {
+        if (index === currentQuestion.correct) {
+            button.textContent += " ✔️"; // Marcar la respuesta correcta
+        }
+        button.disabled = true; // Deshabilitar todos los botones
+    });
+}
 
 // Función para mostrar una pregunta aleatoria
 function showRandomQuestion() {
-    // Verificar si hay preguntas disponibles
-    if (questions.length === 0) {
-        console.log("No hay más preguntas disponibles.");
+    if (currentQuestionIndex >= questions.length) {
+        endTime(); // Finalizar el juego si no hay más preguntas
         return;
     }
 
-    // Seleccionar una pregunta aleatoria
-    const randomIndex = Math.floor(Math.random() * questions.length);
-    const currentQuestion = questions[randomIndex];
+    const currentQuestion = questions[currentQuestionIndex];
 
     // Actualizar el texto de la pregunta
-    const questionElement = document.getElementById('question');
     questionElement.textContent = currentQuestion.question;
 
     // Limpiar las respuestas anteriores
-    const answersElement = document.getElementById('awnsers');
     answersElement.innerHTML = "";
 
-    // Colores de los botones (rotativos)
-    const buttonColors = ['btn-info', 'btn-danger', 'btn-warning', 'btn-success'];
-
     // Generar las opciones de respuesta
-    for (let i = 0; i < currentQuestion.options.length; i++) {
+const buttonColors = ['btn-info', 'btn-danger', 'btn-warning', 'btn-success'];
+    currentQuestion.options.forEach((option, index) => {
         const button = document.createElement('button');
-        button.textContent = currentQuestion.options[i];
-        button.classList.add('btn', buttonColors[i % buttonColors.length], 'w-100'); // Asignar colores rotativos
+        button.textContent = option;
+        button.classList.add('btn', buttonColors[index % buttonColors.length], 'w-100');
         button.addEventListener('click', function () {
-            checkAnswer(i, currentQuestion.correct);
+            checkAnswer(index, currentQuestion.correct);
         });
         answersElement.appendChild(button);
-    }
+    });
 
-    // Eliminar la pregunta usada del array
-    questions.splice(randomIndex, 1);
+    // Reiniciar el temporizador
+    startTimer();
+
+    currentQuestionIndex++; // Incrementar el índice de la pregunta
 }
 
 // Función para verificar la respuesta
@@ -100,11 +117,22 @@ function checkAnswer(selectedIndex, correctIndex) {
     // Actualizar el puntaje solo si la respuesta es correcta
     if (isCorrect) {
         score++;
-        document.getElementById('points').textContent = score; // Actualizar el puntaje en el DOM
+        pointsElement.textContent = score; // Actualizar el puntaje en el DOM
     }
 
+    clearInterval(timerInterval); // Detener el temporizador
     // Habilitar el botón de la flecha para pasar a la siguiente pregunta
     nextButton.disabled = false;
+}
+
+// Función para finalizar el juego
+function endTime() {
+    // Guardar el puntaje y el número total de preguntas en localStorage
+    localStorage.setItem('quizScore', score);
+    localStorage.setItem('questionsAnswered', questions.length);
+
+    // Redirigir a la pantalla final
+    window.location.href = 'quiz-end.html';
 }
 
 // Agregar evento al botón de la flecha
@@ -114,4 +142,6 @@ nextButton.addEventListener('click', function () {
 });
 
 // Inicializar el quiz
-showRandomQuestion();
+document.addEventListener('DOMContentLoaded', function () {
+    showRandomQuestion(); // Mostrar la primera pregunta
+});

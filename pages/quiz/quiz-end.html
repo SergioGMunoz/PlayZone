@@ -28,5 +28,18 @@
     <script src="quiz.js"></script>
     <!-- BOOTSTRAP -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        // Recuperar el puntaje y el número total de preguntas desde localStorage
+        const score = parseInt(localStorage.getItem('quizScore')) || 0;
+        const totalQuestions = parseInt(localStorage.getItem('questionsAnswered')) || 0;
+
+        // Actualizar el contenido del mensaje y el puntaje usando innerHTML
+        const winMessage = document.getElementById('win');
+        if (score >= 3) {
+            winMessage.innerHTML = `¡Bravoo! :) <p>Has acertado <span id="ponits-end">${score}/${totalQuestions}</span> preguntas</p>`;
+        } else {
+            winMessage.innerHTML = `¡Has perdido! :( <p>Has acertado <span id="ponits-end">${score}/${totalQuestions}</span> preguntas</p>`;
+        }
+    </script>
 </body>
 </html>
