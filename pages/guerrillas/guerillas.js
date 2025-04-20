@@ -421,3 +421,4 @@ function addDragStartEvent(element, warriorId) {
 }
 
 nextTurnButton.addEventListener("click", nextTurn);
+
