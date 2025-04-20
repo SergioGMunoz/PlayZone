@@ -1,0 +1,209 @@
+/* Imporar tipografía de PIXEL */
+@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap");
+
+/* Decarar variables en CSS para los colores */
+:root {
+  --dark-green: #00731a;
+  --light-green: #efffef;
+  --red: #dc3545;
+}
+/* 
+Link de la investigación:
+https://elementor.com/blog/es/variables-en-css-la-funcion-var/?utm_source=google&utm_medium=cpc&utm_campaign=21512922672&utm_term=&lang=es&gad_source=1&gbraid=0AAAAADSBr8vGa2uDZOtwTpyfPkqubDVX2&gclid=Cj0KCQjwqv2_BhC0ARIsAFb5Ac9zDinEa3ewt44mCNv9oCZZ19QHubAIef5e6Pc6wuRinYLd_neVuSMaAqOCEALw_wcB */
+
+p {
+  margin: 0 !important;
+}
+
+body {
+  height: 100vh;
+  background-color: var(--light-green) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  margin: 0 2rem;
+}
+
+.title {
+  font-family: "Pixelify Sans", sans-serif;
+  font-weight: bold;
+  color: var(--dark-green);
+  font-size: 3rem;
+}
+
+/* Para el titulo de HAS PEDIDO */
+.loose {
+  color: var(--red) !important;
+}
+
+.p-text {
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.green-button {
+  background-color: var(--dark-green) !important;
+  width: 9rem;
+}
+.green-button:hover {
+  background-color: #006417 !important;
+}
+
+/* GAME */
+#game-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+  margin: 0 2rem;
+}
+
+#shop {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.warrior-shop {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: end;
+}
+
+.warrior-info-shop {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.img-warrior-shop {
+  display: flex;
+  flex-direction: column;
+  width: 5rem;
+}
+
+.info-element {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem;
+}
+
+.img-element {
+  width: 1.2rem !important;
+}
+
+/* Para habilitar y deshabilitar los jugadores que no puedan ser comprados */
+.disabled {
+  opacity: 50%;
+}
+
+#game-field {
+  grid-column: 2 / span 3;
+  display: flex;
+  flex-direction: column;
+}
+#enemy {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+#enemy-img-content {
+  grid-column: 2;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+}
+#enemy-heart-content {
+  grid-column: 3;
+  display: flex;
+  align-items: end;
+  justify-content: left;
+  margin-bottom: 0.4rem;
+}
+#img-enemy-castle {
+  width: 7rem;
+}
+
+#player {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+#player-img-content {
+  grid-column: 2;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+}
+#player-heart-content {
+  grid-column: 3;
+  display: flex;
+  align-items: end;
+  justify-content: left;
+  margin-bottom: 0.4rem;
+}
+#img-player-castle {
+  transform: rotate(180deg);
+  width: 7rem;
+}
+
+#field {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: url("img/field.svg");
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  position: relative;
+}
+
+/* Para mostrar donde no puede soltar el muñeco */
+.cell-not-enabled {
+  background-color: red;
+  opacity: 25%;
+}
+
+/* Para mostrar donde puede soltar el muñeco */
+.cell-available {
+  background-color: yellow;
+  opacity: 0.5;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell img {
+  width: 4rem;
+}
+
+/* Para el estilo de la info del guerrero cuando este en batalla */
+.warrior-stats {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.3rem;
+}
+
+/* Para que el contenido entre en el iframe sin salirse */
+#scale-game {
+  transform: scale(0.8);
+  height: 100%;
+  overflow: hidden;
+}

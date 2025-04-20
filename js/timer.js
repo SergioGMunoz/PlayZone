@@ -32,6 +32,7 @@ let end = function (){
     console.log("end básico");
 };
 
+
 function startTimer(){
     // Cada segundo resta un segundo al contador
     interval = setInterval(decrementTime, 1000);
