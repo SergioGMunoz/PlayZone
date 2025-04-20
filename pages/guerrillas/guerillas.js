@@ -4,20 +4,20 @@ const templateWarriors = {
     img: "img/Warrior1.svg",
     cost: 2,
     live: 4,
-    power: 2
+    power: 1,
   },
   2: {
     img: "img/Warrior2.svg",
-    cost: 3,
-    live: 6,
-    power: 3
+    cost: 5,
+    live: 7,
+    power: 3,
   },
   3: {
     img: "img/Warrior3.svg",
-    cost: 4,
-    live: 5,
-    power: 5
-  }
+    cost: 6,
+    live: 2,
+    power: 7,
+  },
 };
 
 // Guerreros situados en el campo de batalla
@@ -42,16 +42,19 @@ function updateShopWarriors() {
 
   for (let i = 1; i <= 3; i++) {
     const warrior = templateWarriors[i];
-    const imgElement = document.querySelector(`#warrior${i}-shop .img-warrior-shop`);
+    const imgElement = document.querySelector(
+      `#warrior${i}-shop .img-warrior-shop`
+    );
     imgElement.src = warrior.img;
 
     document.getElementById(`warrior${i}-shop-cost`).textContent = warrior.cost;
-    document.getElementById(`warrior${i}-shop-power`).textContent = warrior.power;
+    document.getElementById(`warrior${i}-shop-power`).textContent =
+      warrior.power;
     document.getElementById(`warrior${i}-shop-live`).textContent = warrior.live;
   }
 }
 
-// Comprobar que guerrerros estan disponibles 
+// Comprobar que guerrerros estan disponibles
 function updateShopAvailability() {
   var shopWarriors = document.getElementsByClassName("warrior-shop");
   for (var i = 0; i < shopWarriors.length; i++) {
@@ -100,36 +103,144 @@ function checkEnd() {
   }
 }
 
+//  Elegir alelatoriamente un enemigo y colocarlo en la celda con el index aportado
+function placeRandomEnemy(index) {
+  const warriorId = parseInt(Math.random() * 3) + 1;
+  const warrior = templateWarriors[warriorId];
+  const cell = document.getElementById("en-cell" + (index + 1));
+
+  // Limpiar la celda
+  cell.innerHTML = "";
+
+  // Crear imagen del guerrero
+  const img = document.createElement("img");
+  img.src = warrior.img;
+  img.classList.add("img-warrior-shop");
+
+ // COntenedor de vida y poder
+ const statsDiv = document.createElement("div");
+ statsDiv.classList.add("warrior-stats");
+
+ const lifeDiv = document.createElement("div");
+ lifeDiv.classList.add("info-element");
+ lifeDiv.innerHTML = `
+   <div>
+     <img class="img-element" src="img/heart.svg" alt="heart" />
+   </div>
+   <p>${warrior.live}</p>
+ `;
+
+ const powerDiv = document.createElement("div");
+ powerDiv.classList.add("info-element");
+ powerDiv.innerHTML = `
+   <div>
+     <img class="img-element" src="img/power.svg" alt="power" />
+   </div>
+   <p>${warrior.power}</p>
+ `;
+
+ statsDiv.appendChild(lifeDiv);
+ statsDiv.appendChild(powerDiv);
+
+
+ cell.innerHTML = "";
+ cell.appendChild(img);
+ cell.appendChild(statsDiv);
+
+  // Guardar el guerrero como enemigo
+  enemyWarriors[index] = {
+    live: warrior.live,
+    power: warrior.power,
+  };
+}
+
+/* Funcionalidad IA de enemigo. Coloca en cada ronda un guerrero y con un 10% de posibilidades otro más */
+function enemyIA() {
+  //Aqui guardamos las posiciones posibles para colocar guerreros
+  const availablePositions = [];
+
+  // Encontrar las posiciones que el jugador tenga guerreros
+  for (let i = 0; i < 3; i++) {
+    if (playerWarriors[i] && !enemyWarriors[i]) {
+      availablePositions.push(i);
+    }
+  }
+
+  // Si no hay guerreros del jugador guarda el resto de casillas disponibles
+  if (availablePositions.length === 0) {
+    for (let i = 0; i < 3; i++) {
+      if (!enemyWarriors[i]) {
+        availablePositions.push(i);
+      }
+    }
+  }
+
+  // Colocar el enemigo y lo elimina de guardados
+  if (availablePositions.length > 0) {
+    const firstPos = availablePositions.shift();
+    placeRandomEnemy(firstPos);
+
+    // Con un 10% de posibilidad coloca un segundo enemigo si hay hueco
+    if (Math.random() < 0.1) {
+      const secondPos = availablePositions.shift();
+      if (secondPos) {
+        placeRandomEnemy(secondPos);
+      }
+    }
+  }
+}
+
+function updateField() {
+  for (let i = 0; i < 3; i++) {
+    if (enemyWarriors[i]) {
+      // Si existe y no tiene vida se elimina
+      if (enemyWarriors[i].live <= 0) {
+        removeWarriorFromCell("en-cell" + (i + 1));
+        enemyWarriors[i] = null;
+      } else {
+        // Actualizar vida si sigue vivo
+        const enemyCell = document.getElementById("en-cell" + (i + 1));
+        const enemyLife = enemyCell.querySelector(".info-element p");
+        if (enemyLife) {
+          enemyLife.textContent = enemyWarriors[i].live;
+        }
+      }
+    }
+    // Lo mismos para los guerreros del jugador
+    if (playerWarriors[i]) {
+      if (playerWarriors[i].live <= 0) {
+        removeWarriorFromCell("p-cell" + (i + 1));
+        playerWarriors[i] = null;
+      } else {
+        const playerCell = document.getElementById("p-cell" + (i + 1));
+        const playerLife = playerCell.querySelector(".info-element p");
+        if (playerLife) {
+          playerLife.textContent = playerWarriors[i].live;
+        }
+      }
+    }
+  }
+}
+
 //Función despues del turno del jugador para resolver el combate
 function combat() {
   for (let i = 0; i < 3; i++) {
     let playerUnit = playerWarriors[i];
     let enemyUnit = enemyWarriors[i];
 
-    // Si ambos tienen guerrerros y no son null, se atacan entre sí
     if (playerUnit && enemyUnit) {
       playerUnit.live -= enemyUnit.power;
       enemyUnit.live -= playerUnit.power;
-
-      // Eliminar guerreros muertos
-      if (playerUnit.live <= 0) {
-        playerWarriors[i] = null;
-        removeWarriorFromCell("p-cell" + (i + 1));
-      }
-
-      if (enemyUnit.live <= 0) {
-        enemyWarriors[i] = null;
-        removeWarriorFromCell("en-cell" + (i + 1));
-      }
-    }else if (playerUnit && !enemyUnit) { // Atacar castillo oponente
+    } else if (playerUnit && !enemyUnit) {
       enemyLive -= playerUnit.power;
       if (enemyLive < 0) enemyLive = 0;
-    }else if (enemyUnit && !playerUnit) { //Atacar castillo jugador
+    } else if (enemyUnit && !playerUnit) {
       playerLive -= enemyUnit.power;
       if (playerLive < 0) playerLive = 0;
     }
-
   }
+
+  updateField();
   updateInfo();
   checkEnd();
 }
@@ -154,21 +265,23 @@ function nextTurn() {
   isPlayerTurn = false;
   updateBtnNextTurn();
 
-  // Esperar 1 segundo, funcion anomina para facilitar la lectura del codigo
-  setTimeout(function enemyTurn () {
-    // Aquí podrías ejecutar enemyIA() más adelante
-    console.log("Turno del enemigo (IA)");
+  // Esperar 1 segundo
+  setTimeout(function enemyTurn() {
+    //Llamada a la funcion de la IA del enemigo
+    enemyIA();
+    console.log("Turno del enemigo");
 
-    // Esperar otro segundo, funcion anomina para facilitar la lectura del codigo 
-    setTimeout(function playerTurn () {
+    // Esperar otro segundo
+    setTimeout(function playerTurn() {
       isPlayerTurn = true;
       updateBtnNextTurn();
       console.log("Vuelve el turno del jugador");
     }, 1000);
-
   }, 1000);
-}
 
+  money += 3;
+  updateInfo();
+}
 
 // Habilitar drag and drop a los elegibles
 function enableDragAndDrop() {
@@ -181,7 +294,7 @@ function enableDragAndDrop() {
   var playerCells = [
     document.getElementById("p-cell1"),
     document.getElementById("p-cell2"),
-    document.getElementById("p-cell3")
+    document.getElementById("p-cell3"),
   ];
 
   for (var j = 0; j < playerCells.length; j++) {
@@ -189,20 +302,19 @@ function enableDragAndDrop() {
   }
 }
 
-// Esta función se ejecuta al comenzar a arrastrar un guerrero. 
-// Guarda el ID del guerrero en el objeto dataTransfer, 
+// Esta función se ejecuta al comenzar a arrastrar un guerrero.
+// Guarda el ID del guerrero en el objeto dataTransfer,
 // para poder recuperarlo luego en la celda donde se suelte (drop).
 function onDragStart(event, warriorId) {
   event.dataTransfer.setData("warriorId", warriorId);
 }
 
-
 function addCellEvents(cell, index) {
   cell.addEventListener("dragover", onDragOver);
-  cell.addEventListener("dragleave", function() {
+  cell.addEventListener("dragleave", function () {
     onDragLeave(cell);
   });
-  cell.addEventListener("drop", function(event) {
+  cell.addEventListener("drop", function (event) {
     onDrop(event, cell, index);
   });
 }
@@ -228,14 +340,40 @@ function onDrop(event, cell, index) {
   var img = document.createElement("img");
   img.src = warrior.img;
   img.classList.add("img-warrior-shop");
+
+  // COntenedor de vida y poder
+  const statsDiv = document.createElement("div");
+  statsDiv.classList.add("warrior-stats");
+
+  const lifeDiv = document.createElement("div");
+  lifeDiv.classList.add("info-element");
+  lifeDiv.innerHTML = `
+    <div>
+      <img class="img-element" src="img/heart.svg" alt="heart" />
+    </div>
+    <p>${warrior.live}</p>
+  `;
+
+  const powerDiv = document.createElement("div");
+  powerDiv.classList.add("info-element");
+  powerDiv.innerHTML = `
+    <div>
+      <img class="img-element" src="img/power.svg" alt="power" />
+    </div>
+    <p>${warrior.power}</p>
+  `;
+
+  statsDiv.appendChild(lifeDiv);
+  statsDiv.appendChild(powerDiv);
+
+
   cell.innerHTML = "";
   cell.appendChild(img);
+  cell.appendChild(statsDiv);
 
   playerWarriors[index] = {
-    img: warrior.img,
-    cost: warrior.cost,
     live: warrior.live,
-    power: warrior.power
+    power: warrior.power,
   };
 
   money -= warrior.cost;
@@ -247,7 +385,7 @@ function getPlayerCells() {
   return [
     document.getElementById("p-cell1"),
     document.getElementById("p-cell2"),
-    document.getElementById("p-cell3")
+    document.getElementById("p-cell3"),
   ];
 }
 
@@ -271,14 +409,14 @@ function clearAvailableCells() {
 
 function addDragStartEvent(element, warriorId) {
   // Pinta amarillas las casillas libres al empezar el drag
-  element.addEventListener("dragstart", function(event) {
+  element.addEventListener("dragstart", function (event) {
     onDragStart(event, warriorId);
-    highlightAvailableCells();   
+    highlightAvailableCells();
   });
 
   // Quita el amarillo al terminar el drag
-  element.addEventListener("dragend", function() {
-    clearAvailableCells();       
+  element.addEventListener("dragend", function () {
+    clearAvailableCells();
   });
 }
 
