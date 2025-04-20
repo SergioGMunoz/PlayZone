@@ -99,7 +99,7 @@ body {
 }
 
 .img-element {
-  width: 1.2rem;
+  width: 1.2rem !important;
 }
 
 /* Para habilitar y deshabilitar los jugadores que no puedan ser comprados */
@@ -181,10 +181,22 @@ body {
 
 .cell {
   display: flex;
+  flex-direction: column;
+  gap: 1rem;
   align-items: center;
   justify-content: center;
 }
 
 .cell img {
   width: 4rem;
+}
+
+/* Para el estilo de la info del guerrero cuando este en batalla */
+.warrior-stats {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.3rem;
 }
