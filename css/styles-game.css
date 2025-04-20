@@ -10,6 +10,5 @@ body{
 
 #game-iframe{
     height: 80vh;
-    overflow: hidden; 
-    padding: 50px;
+    overflow: visible; 
 }
