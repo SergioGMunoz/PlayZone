@@ -14,8 +14,8 @@
         <h2>¡Has ganado!</h2>
         <p>Encontraste todos los trios de cartas, ¡Felicidades!</p>
         <div class="d-flex justify-content-center gap-5 mt-5 ">
-          <button id="btn-menu" class="btn btn-primary">Menú principal</button>
-          <button id="btn-replay" class="btn btn-primary">Volver a jugar</button>
+          <button id="home" class="btn btn-primary">Menú principal</button>
+          <button id="replay" class="btn btn-primary">Volver a jugar</button>
         </div>
       </div>
   </div>
@@ -24,12 +24,12 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
   <script>
-    document.getElementById("btn-menu").addEventListener("click", function() {
+    document.getElementById("home").addEventListener("click", function() {
       window.top.location.href = "../../index.html"; 
     });
 
-    document.getElementById("btn-replay").addEventListener("click", function() {
-      parent.document.getElementById("game-iframe").src = "pages/trio/trio.html";
+    document.getElementById("replay").addEventListener("click", function() {
+      window.location.href = 'trio.html';
     });
   </script>
 </body>

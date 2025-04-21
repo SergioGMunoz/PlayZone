@@ -10,13 +10,15 @@
 </head>
 
 <body>
-    <div id="points-div" class="bg-secondary text-white p-2 px-3 rounded">
-        <img id="trophy-icon" src="img/trophy.svg" alt="Trofeo">
-        <span id="points">0</span>
-    </div>
-    <div id="time-div" class="bg-secondary text-white p-2 px-3 rounded">
-        <img src="img/clock.svg" alt="Reloj" style="width: 24px; height: 24px; margin-right: 5px;">
-        <span id="time">10</span>
+    <div id="info-bar" class="d-flex gap-3 p-2">
+        <div id="points-div" class="bg-secondary text-white p-2 px-3 rounded d-flex align-items-center">
+            <img id="trophy-icon" src="img/trophy.svg" alt="Puntuación">
+            <span id="points">0</span>
+        </div>
+        <div id="time-div" class="bg-secondary text-white p-2 px-3 rounded d-flex align-items-center">
+            <img src="img/clock.svg" alt="Reloj">
+            <span id="time">10</span>
+        </div>
     </div>
       
     <div id="logo" class="d-flex justify-content-center">
@@ -27,8 +29,7 @@
         <h2 id="question">Aquí aparecerá la pregunta</h2>
         <div id="awnsers" class="d-flex flex-column gap-3 w-100"></div>
         <div id="end-button" class="text-center">
-           <a href="quiz-start.html" class="btn btn-secondary">Salir del juego</a>
-            <button type="button" class="btn btn-secondary" disabled>
+            <button type="button" class="btn btn-secondary d-none">
                 <img src="img/arrow-next-white.svg" alt="Siguiente">
             </button>
         </div>

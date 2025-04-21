@@ -1,8 +1,7 @@
-// JavaScript funcionalidad de el juego quiz!
-let score = 0; // Contador de puntos
-let currentQuestionIndex = 0; // Índice de la pregunta actual
-let timeLeft = 10; // Tiempo por pregunta
-let timerInterval; // Intervalo del temporizador
+// JavaScript funcionalidad de el juego quiz
+let score = 0; 
+let currentQuestionIndex = 0;
+let hasAnswered = false;
 
 // Elementos del DOM
 const timerElement = document.getElementById('time');
@@ -11,17 +10,20 @@ const questionElement = document.getElementById('question');
 const answersElement = document.getElementById('awnsers');
 const nextButton = document.querySelector('#end-button button');
 
+// Inicialización del temporizador
+setTimeElement(timerElement);
+
 // Preguntas y respuestas
 const questions = [
     {
         question: "¿Cuál es la capital de Francia?",
         options: ["Madrid", "París", "Roma", "Berlín"],
-        correct: 1 // Índice de la respuesta correcta
+        correct: 1
     },
     {
-        question: "¿Cuál es el resultado de 5 + 3?",
-        options: ["5", "8", "10", "7"],
-        correct: 1
+        question: "¿Cuál es el resultado de (5 + 3) × 2 - 4?",
+        options: ["12", "16", "10", "8"],
+        correct: 0
     },
     {
         question: "¿Qué lenguaje se usa para estilizar páginas web?",
@@ -32,116 +34,138 @@ const questions = [
         question: "¿Quién pintó la Mona Lisa?",
         options: ["Van Gogh", "Picasso", "Leonardo da Vinci", "Miguel Ángel"],
         correct: 2
+    },
+    {
+        question: "¿Cuál es el océano más grande del mundo?",
+        options: ["Atlántico", "Índico", "Ártico", "Pacífico"],
+        correct: 3
     }
 ];
 
-// Función para iniciar el temporizador
-function startTimer() {
-    timeLeft = 10; // Reiniciar el tiempo
-    timerElement.textContent = timeLeft;
-
-    clearInterval(timerInterval); // Limpiar cualquier temporizador previo
-    timerInterval = setInterval(function () {
-        timeLeft--;
-        timerElement.textContent = timeLeft;
-
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            markCorrectAnswer(); // Marcar la respuesta correcta
-            nextButton.disabled = false; // Habilitar el botón de siguiente
-        }
-    }, 1000);
-}
-
-// Función para marcar la respuesta correcta automáticamente
-function markCorrectAnswer() {
-    const buttons = document.querySelectorAll('.btn');
-    const currentQuestion = questions[currentQuestionIndex];
-
-    buttons.forEach((button, index) => {
-        if (index === currentQuestion.correct) {
-            button.textContent += " ✔️"; // Marcar la respuesta correcta
-        }
-        button.disabled = true; // Deshabilitar todos los botones
-    });
-}
-
-// Función para mostrar una pregunta aleatoria
-function showRandomQuestion() {
+// Mostrar una pregunta
+function showQuestion() {
     if (currentQuestionIndex >= questions.length) {
-        endTime(); // Finalizar el juego si no hay más preguntas
+        endTime();
         return;
     }
 
     const currentQuestion = questions[currentQuestionIndex];
-
-    // Actualizar el texto de la pregunta
     questionElement.textContent = currentQuestion.question;
-
-    // Limpiar las respuestas anteriores
     answersElement.innerHTML = "";
 
-    // Generar las opciones de respuesta
-const buttonColors = ['btn-info', 'btn-danger', 'btn-warning', 'btn-success'];
-    currentQuestion.options.forEach((option, index) => {
-        const button = document.createElement('button');
-        button.textContent = option;
-        button.classList.add('btn', buttonColors[index % buttonColors.length], 'w-100');
-        button.addEventListener('click', function () {
-            checkAnswer(index, currentQuestion.correct);
-        });
-        answersElement.appendChild(button);
-    });
+    const buttonColors = ['btn-info', 'btn-danger', 'btn-warning', 'btn-success'];
 
-    // Reiniciar el temporizador
+    // Reiniciar temporizador
+    setTime(10); 
     startTimer();
 
-    currentQuestionIndex++; // Incrementar el índice de la pregunta
+    // Asignar respuestas de la pregunta actual
+    for (let i = 0; i < currentQuestion.options.length; i++) {
+        const option = currentQuestion.options[i];
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.classList.add('btn', buttonColors[i], 'w-100', 'answer');
+        button.addEventListener('click', handleAnswerClick(i, currentQuestion.correct));
+        answersElement.appendChild(button);
+    }
+    hasAnswered = false;
 }
 
-// Función para verificar la respuesta
+// Al acabar el temporizador
+end = function() {
+    markAnswers(null, true); 
+};
+
+// Al hacer click en una respuesta
+function handleAnswerClick(index, correctIndex) {
+    return function () {
+        checkAnswer(index, correctIndex); 
+    };
+}
+
+// Verificar respuesta
 function checkAnswer(selectedIndex, correctIndex) {
-    const buttons = document.querySelectorAll('.btn'); // Seleccionar los botones de las respuestas
-    const isCorrect = selectedIndex === correctIndex; // Comprobar si la respuesta es correcta
+    if (hasAnswered) return;
+    hasAnswered = true;
 
-    for (let i = 0; i < buttons.length; i++) {
-        if (i === correctIndex) {
-            buttons[i].textContent += " ✔️"; // Agregar un tic verde a la respuesta correcta
-        }
-        if (!isCorrect && i === selectedIndex) {
-            buttons[i].textContent += " ❌"; // Agregar una cruz roja a la respuesta incorrecta
-        }
-        buttons[i].disabled = true; // Deshabilitar todos los botones después de responder
-    }
+    clearInterval(interval);
 
-    // Actualizar el puntaje solo si la respuesta es correcta
+    const isCorrect = selectedIndex === correctIndex;
+
     if (isCorrect) {
         score++;
-        pointsElement.textContent = score; // Actualizar el puntaje en el DOM
+        pointsElement.textContent = score;
     }
 
-    clearInterval(timerInterval); // Detener el temporizador
-    // Habilitar el botón de la flecha para pasar a la siguiente pregunta
-    nextButton.disabled = false;
+    markAnswers(selectedIndex, false);
 }
 
-// Función para finalizar el juego
+
+// Marcar las respuestas correctas e incorrectas
+function markAnswers(selectedIndex, timeExpired = false) {
+    const currentQuestion = questions[currentQuestionIndex];
+    const correctIndex = currentQuestion.correct;
+    const buttons = document.querySelectorAll('.answer');
+
+    for (let i = 0; i < buttons.length; i++) {
+        // Si el tiempo ha expirado, marcamos todas las respuestas incorrectas
+        if (timeExpired) {
+            if (i == correctIndex) {
+                buttons[i].textContent += " ✔️";
+            } else {
+                buttons[i].textContent += " ❌";
+                buttons[i].style.opacity = 0.5;
+            }
+
+        } else {
+            // Si no ha expirado, solo marcamos la respuesta seleccionada como incorrecta si es incorrecta
+            if (i == correctIndex) {
+                buttons[i].textContent += " ✔️";
+            }
+
+            if (i == selectedIndex && i !== correctIndex) {
+                buttons[i].textContent += " ❌";
+            }
+
+            // Si no es la correcta ni la seleccionada, se baja la opacidad
+            if (i !== correctIndex && i !== selectedIndex) {
+                buttons[i].style.opacity = 0.5;
+            }
+        }
+    }
+
+    nextButton.classList.remove('d-none');
+}
+
+
+// Finalizar el juego
 function endTime() {
-    // Guardar el puntaje y el número total de preguntas en localStorage
     localStorage.setItem('quizScore', score);
     localStorage.setItem('questionsAnswered', questions.length);
-
-    // Redirigir a la pantalla final
     window.location.href = 'quiz-end.html';
 }
 
-// Agregar evento al botón de la flecha
+
+// Botón de siguiente pregunta
 nextButton.addEventListener('click', function () {
-    nextButton.disabled = true; // Deshabilitar el botón de la flecha hasta que se conteste la siguiente pregunta
-    showRandomQuestion(); // Mostrar la siguiente pregunta
+    nextButton.classList.add('d-none');
+    currentQuestionIndex++; 
+    showQuestion();
 });
 
-// Inicializar el quiz
+
+// Inicialización
 document.addEventListener('DOMContentLoaded', function () {
-    showRandomQuestion(); // Mostrar la primera pregunta
+    shuffleArray(questions);
+    showQuestion();
 });
+
+
+// mezclar preguntas al azar
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i]; array[i] = array[j];
+        array[j] = temp;
+    }
+}

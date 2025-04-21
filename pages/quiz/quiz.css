@@ -1,17 +1,13 @@
-#logo-img{
-    width: 10rem;
-}
-body {
-    height: 100vh; 
+body { 
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    justify-content: center; 
+    justify-content: flex-start; /* Alinea todo hacia la parte superior */
     align-items: center;   
     margin: 0 2rem !important;
-  }
+}
 
-#start, #game{
+#game {
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -19,20 +15,11 @@ body {
     align-items: center;     
 }
 
-#trophy-icon, #clock-icon, #check-icon, #x-icon{
-    width: 1.5rem;
-    height: 1.5rem;
-    margin-right: 0.4rem;
-}
 
-#points-div{
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-}
-
-#time-div{
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
+#info-bar {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    width: 100%;
+    margin-bottom: 2rem; /* Añadimos un margen en la parte inferior */
 }
