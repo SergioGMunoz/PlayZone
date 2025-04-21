@@ -1,15 +1,14 @@
 /* Hoja de estilos concretos para la pagina game.html */
-*{
-    margin: 0;
-    padding: 0;
-}
-body{
-    height: 100vh;
-    overflow: hidden; 
-}
 
 #game-iframe{
-    height: 80vh;
-    overflow: hidden; 
+    min-height: 80vh;
     padding: 50px;
+}
+
+/* Media Query para pantallas pequeñas (menos de 576px) */
+@media (max-width: 768px) {
+    #game-iframe {
+        padding-top: 0; /* Elimina el padding superior */
+        padding-bottom: 0; /* Elimina el padding inferior */
+    }
 }
